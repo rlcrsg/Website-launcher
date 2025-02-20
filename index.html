@@ -17,8 +17,11 @@
                 <select id="categoryFilter" class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
                     <option value="all">All Categories</option>
                     <option value="Favorites">Favorites</option>
+                    <option value="Carriers">Carriers</option>
+                    <option value="Tools">Tools</option>
+                    <option value="Vendors">Vendors</option>
                     <option value="MGA">MGA</option>
-                    <option value="Partnership">Partnership</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
             <div class="flex gap-4 items-center">
@@ -39,8 +42,11 @@
                 <input type="url" id="siteURL" placeholder="Website URL" 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
                 <select id="siteCategory" class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option value="Carriers">Carriers</option>
+                    <option value="Tools">Tools</option>
+                    <option value="Vendors">Vendors</option>
                     <option value="MGA">MGA</option>
-                    <option value="Partnership">Partnership</option>
+                    <option value="Other">Other</option>
                 </select>
                 <input type="url" id="siteLogo" placeholder="Custom Logo URL (Optional)" 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
@@ -65,8 +71,8 @@
 
         // Update existing websites to new categories if needed
         websites = websites.map(site => {
-            if (!['MGA', 'Partnership'].includes(site.category)) {
-                site.category = 'MGA'; // Default to MGA for old entries
+            if (!['Carriers', 'Tools', 'Vendors', 'MGA', 'Other'].includes(site.category)) {
+                site.category = 'Other'; // Default to Other for old entries
             }
             return site;
         });
