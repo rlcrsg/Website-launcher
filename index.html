@@ -17,10 +17,8 @@
                 <select id="categoryFilter" class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
                     <option value="all">All Categories</option>
                     <option value="Favorites">Favorites</option>
-                    <option value="Carriers">Carriers</option>
-                    <option value="Tools">Tools</option>
-                    <option value="Vendors">Vendors</option>
-                    <option value="Other">Other</option>
+                    <option value="MGA">MGA</option>
+                    <option value="Partnership">Partnership</option>
                 </select>
             </div>
             <div class="flex gap-4 items-center">
@@ -41,10 +39,8 @@
                 <input type="url" id="siteURL" placeholder="Website URL" 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
                 <select id="siteCategory" class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option value="Carriers">Carriers</option>
-                    <option value="Tools">Tools</option>
-                    <option value="Vendors">Vendors</option>
-                    <option value="Other">Other</option>
+                    <option value="MGA">MGA</option>
+                    <option value="Partnership">Partnership</option>
                 </select>
                 <input type="url" id="siteLogo" placeholder="Custom Logo URL (Optional)" 
                     class="p-2 border rounded focus:ring-2 focus:ring-blue-500 outline-none">
@@ -67,6 +63,15 @@
         const errorAlert = document.getElementById('errorAlert');
         let websites = JSON.parse(localStorage.getItem('websites')) || [];
 
+        // Update existing websites to new categories if needed
+        websites = websites.map(site => {
+            if (!['MGA', 'Partnership'].includes(site.category)) {
+                site.category = 'MGA'; // Default to MGA for old entries
+            }
+            return site;
+        });
+        localStorage.setItem('websites', JSON.stringify(websites));
+
         function showError(message) {
             errorAlert.textContent = message;
             errorAlert.classList.remove('hidden');
@@ -76,18 +81,10 @@
         async function getFaviconUrls(url) {
             try {
                 const hostname = new URL(url).hostname;
-                // Try multiple favicon services and sources
-                const sources = [
-                    `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`,
-                    `https://icon.horse/icon/${hostname}`,
-                    `https://${hostname}/favicon.ico`,
-                ];
-                
-                // Return an object with multiple potential sources
                 return {
-                    primary: sources[0],
-                    fallback1: sources[1],
-                    fallback2: sources[2]
+                    primary: `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`,
+                    fallback1: `https://icon.horse/icon/${hostname}`,
+                    fallback2: `https://${hostname}/favicon.ico`
                 };
             } catch {
                 return null;
@@ -198,6 +195,7 @@
                             <p class="text-center font-medium text-gray-800 break-words w-full">
                                 ${site.name}
                             </p>
+                            <p class="text-xs text-gray-500 mt-1">${site.category}</p>
                         </a>
                         <button onclick="removeWebsite(${originalIndex})" 
                             class="mt-2 text-red-500 hover:text-red-700 transition-colors">
